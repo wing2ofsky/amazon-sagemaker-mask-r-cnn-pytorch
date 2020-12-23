@@ -77,7 +77,7 @@ def infer(input_image):
 
     runtime = session.client("runtime.sagemaker")
     response = runtime.invoke_endpoint(
-        EndpointName='yolov4',
+        EndpointName='mrcnn-car',
         ContentType="application/json",
         Body=payload)
 
@@ -87,7 +87,14 @@ def infer(input_image):
 infer('test.jpg')
 ~~~~
 
-~~~~text
+multi-process
 
+~~~~ python
+%%time 
+import multiprocessing as mul
+
+pool = mul.Pool(5)
+rel = pool.map(infer, ['end/test2.jpg','end/test.jpg','end/test2.jpg','end/test2.jpg','end/test2.jpg','end/test2.jpg'])
+print(rel)
 ~~~~
 
