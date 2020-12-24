@@ -7,6 +7,7 @@ Deploy MaskRCNN (torch-vision)  on Amazon SageMaker
 ## Features
 
 - [x] **Use MaskRCNN pretrained model (coco) to deploy**
+- [x] **support gpu inference**
 
 
 ## Quick Start
@@ -42,8 +43,8 @@ r = requests.post(url,data=payload)
 
 #show result
 print (r.text)
-CPU times: user 5.8 ms, sys: 0 ns, total: 5.8 ms
-Wall time: 4.05 s
+CPU times: user 763 ms, sys: 125 ms, total: 888 ms
+Wall time: 795 ms
 ~~~~
 
 result

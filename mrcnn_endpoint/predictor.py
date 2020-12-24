@@ -15,6 +15,7 @@ from PIL import Image
 import itertools
 import cv2
 import skimage.io
+import torch
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -80,13 +81,17 @@ def invocations():
 
     print('Start to inference:')
 
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
     model = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
     # set it to evaluation mode, as the model behaves differently
     # during training and during evaluation
+    model.to(device)
     model.eval()
 
     image = PIL.Image.open(download_file_name)
     image_tensor = torchvision.transforms.functional.to_tensor(image)
+    image_tensor = image_tensor.to(device)
 
     # pass a list of (potentially different sized) tensors
     # to the model, in 0-1 range. The model will take care of
