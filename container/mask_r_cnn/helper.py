@@ -54,6 +54,9 @@ class LianbaoDataset(torch.utils.data.Dataset):
         boxes = torch.as_tensor(boxes, dtype=torch.float32)
 
         # todo: fix labels
+        # 备注：类别列表 -
+        # D-损伤类型：【刮擦，开裂，褶皱，穿孔，其他】
+        # E-损伤程度： 【轻度损伤，中度损伤，重度损伤，其他】
         labels = torch.ones((num_objs,), dtype=torch.int64)
 
         #todo: fix masks
