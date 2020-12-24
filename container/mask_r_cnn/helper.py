@@ -15,6 +15,70 @@ import utils
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
 
+class LianbaoDataset(torch.utils.data.Dataset):
+    #assume the each contains one label file for one pic, inside two folders with same name
+    def __init__(self, root, transforms=None):
+        self.root = root
+        self.transforms = transforms
+        # load all image files, sorting them to
+        # ensure that they are aligned
+        self.imgs = list(sorted(os.listdir(os.path.join(root, "pic"))))
+        self.labels = list(sorted(os.listdir(os.path.join(root, "label"))))
+
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.root, "pic", self.imgs[idx])
+        label_path = os.path.join(self.root, "label", self.imgs[idx])
+        img = Image.open(img_path).convert("RGB")
+        width, height = img.size
+
+        annotations = json.load(open(label_path))
+        annotations = list(annotations.values())  # don't need the dict keys
+        annotations = [a for a in annotations if a['regions']]
+
+        objs = annotations[0]['regions']
+
+        # 获取每个mask的边界框坐标
+        num_objs = len(objs)
+        boxes = []
+        for i in range(num_objs):
+            try:
+                xmin = np.min(objs[i]['shape_attributes']['all_points_x'])
+                xmax = np.max(objs[i]['shape_attributes']['all_points_x'])
+                ymin = np.min(objs[i]['shape_attributes']['all_points_y'])
+                ymax = np.max(objs[i]['shape_attributes']['all_points_y'])
+                boxes.append([xmin, ymin, xmax, ymax])
+            except ValueError:
+                continue
+
+        # 将所有转换为torch.Tensor
+        boxes = torch.as_tensor(boxes, dtype=torch.float32)
+
+        # todo: fix labels
+        labels = torch.ones((num_objs,), dtype=torch.int64)
+
+        #todo: fix masks
+        masks =
+
+        image_id = torch.tensor([idx])
+        iscrowd = torch.zeros((num_objs,), dtype=torch.int64)
+        area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
+
+        target = {}
+        target["boxes"] = boxes
+        target["labels"] = labels
+        target["masks"] = masks
+        target["image_id"] = image_id
+        target["area"] = area
+        target["iscrowd"] = iscrowd
+
+        if self.transforms is not None:
+            img, target = self.transforms(img, target)
+
+        return img, target
+
+    def __len__(self):
+        return len(self.imgs)
+
 
 class PennFudanDataset(torch.utils.data.Dataset):
     def __init__(self, root, transforms=None):
