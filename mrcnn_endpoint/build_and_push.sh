@@ -27,15 +27,17 @@ region=$(aws configure get region)
 #regions=$(aws ec2 describe-regions --all-regions --query "Regions[].{Name:RegionName}" --output text)
 
 #for region in $regions; do
-
-#aws s3 cp s3://aws-solutions-${region}/spot-bot-models/cars/model.tar.gz ./
-#tar zxvf model.tar.gz
 # TODO: update regional location based on https://amazonaws-china.com/releasenotes/available-deep-learning-containers-images/
 if [[ $region = "ap-east-1" ]]
 then
     fullname="${account}.dkr.ecr.${region}.amazonaws.com/${image}:latest"
     registry_id="871362719292"
     registry_uri="${registry_id}.dkr.ecr.${region}.amazonaws.com"
+elif [[ $region =~ ^cn.* ]]
+then
+    fullname="${account}.dkr.ecr.${region}.amazonaws.com.cn/${image}:latest"
+    registry_id="727897471807"
+    registry_uri="${registry_id}.dkr.ecr.${region}.amazonaws.com.cn"
 else
     fullname="${account}.dkr.ecr.${region}.amazonaws.com/${image}:latest"
     registry_id="763104351884"

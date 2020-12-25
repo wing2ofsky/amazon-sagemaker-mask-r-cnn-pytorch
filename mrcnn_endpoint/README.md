@@ -1,14 +1,14 @@
 # Maskrcnn-SageMaker
-Deploy MaskRCNN (torch-vision)  on Amazon SageMaker
+Deploy `MaskRCNN` (torch-vision)  on `Amazon SageMaker`
 
-
-<a name="YOLOv4"></a>
+## Maskrcnn
+`Mask R-CNN` 是一个两阶段的框架，第一个阶段扫描图像并生成提议（proposals，即有可能包含一个目标的区域），第二阶段分类提议并生成边界框和掩码。Mask R-CNN 扩展自 Faster R-CNN，由同一作者提出。Faster R-CNN 是一个流行的目标检测框架，Mask R-CNN 将其扩展为实例分割框架。
+[source code](https://github.com/matterport/Mask_RCNN)
 
 ## Features
 
-- [x] **Use MaskRCNN pretrained model (coco) to deploy**
+- [x] **Use `MaskRCNN` pretrained model (coco) to deploy on `Amazon SageMaker`**
 - [x] **support gpu inference**
-
 
 ## Quick Start
 
@@ -19,6 +19,7 @@ Deploy MaskRCNN (torch-vision)  on Amazon SageMaker
 server
 ~~~~shell script
 sh build_and_push.sh
+#if test locally, run below
 docker run -v -d -p 8080:8080 mrcnn-car
 ~~~~
 
