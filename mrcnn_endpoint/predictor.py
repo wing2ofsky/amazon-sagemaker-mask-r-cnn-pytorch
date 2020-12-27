@@ -39,7 +39,7 @@ import flask
 # The flask app for serving predictions
 app = flask.Flask(__name__)
 
-s3_client = boto3.client('s3')
+s3_client = boto3.client('s3', region_name='cn-northwest-1')
 
 
 @app.route('/ping', methods=['GET'])
