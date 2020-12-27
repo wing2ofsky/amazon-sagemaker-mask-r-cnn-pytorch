@@ -16,6 +16,8 @@ Deploy `MaskRCNN` (torch-vision)  on `Amazon SageMaker`
 
 # build the environment and test locally
 
+setup default region before proceeding
+
 server
 ~~~~shell script
 sh build_and_push.sh
