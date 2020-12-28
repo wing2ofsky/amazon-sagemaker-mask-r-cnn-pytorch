@@ -47,6 +47,10 @@ def is_endpoint_running(endpoint_name):
     Content of check_name could be "InService" or other.
     if the named endpoint doesn't exist then return None.
     """
+    
+    region = boto3.Session().region_name
+    print("current region is", region)
+    
     client = boto3.client('sagemaker')
     endpoints = client.list_endpoints()
     endpoint_name_list = [(ep["EndpointName"], ep["EndpointStatus"]) for ep in endpoints["Endpoints"]]
@@ -63,6 +67,7 @@ def deploy_endpoint():
 
     try:
         role = get_execution_role()
+     #  role = 'arn:xxxxx' set as static arn role in case local environment doesn't meet above approach
     except Exception as e:
         print("SageMaker Role doesn't exist.")
 
